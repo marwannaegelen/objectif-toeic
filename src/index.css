@@ -1,0 +1,166 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * ===========================================================================
+ *  OBJECTIF TOEIC — TOKENS DE DESIGN (source de vérité runtime)
+ *  Les mêmes valeurs sont déclarées dans tailwind.config.js et documentées
+ *  dans DESIGN_SYSTEM.md. Elles sont exposées ici en variables CSS pour un
+ *  usage hors Tailwind (SVG, dégradés dynamiques, canvas).
+ * ===========================================================================
+ */
+:root {
+  /* Fonds */
+  --c-base: #070a14;
+  --c-night: #0b1022;
+  --c-surface: #111730;
+  --c-surface-2: #171e3d;
+
+  /* Marque */
+  --c-electric: #3d7bff;
+  --c-electric-soft: #5b8dff;
+  --c-violet: #9b5cff;
+  --c-violet-soft: #b388ff;
+
+  /* États */
+  --c-success: #34d399;
+  --c-warn: #fbbf24;
+  --c-danger: #fb7185;
+
+  /* Texte */
+  --c-ink: #f4f7ff;
+  --c-ink-muted: #9aa6c2;
+
+  /* Durées & courbes du langage de motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 160ms;
+  --dur-base: 280ms;
+  --dur-slow: 520ms;
+
+  color-scheme: dark;
+}
+
+* {
+  border-color: var(--c-surface-2);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--c-base);
+  color: var(--c-ink);
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* Halo lumineux maîtrisé en fond de page */
+  background-image:
+    radial-gradient(70% 55% at 80% -10%, rgba(155, 92, 255, 0.12) 0%, transparent 60%),
+    radial-gradient(60% 50% at 10% 0%, rgba(61, 123, 255, 0.14) 0%, transparent 55%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: "Sora", system-ui, sans-serif;
+  font-weight: 700;
+  color: var(--c-ink);
+}
+
+/* Barre de défilement discrète et premium */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.18);
+  background-clip: padding-box;
+}
+
+::selection {
+  background: rgba(61, 123, 255, 0.35);
+  color: #fff;
+}
+
+/* Focus visible accessible et cohérent */
+:focus-visible {
+  outline: 2px solid var(--c-electric-soft);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@layer components {
+  .glass {
+    background: linear-gradient(
+      180deg,
+      rgba(23, 30, 61, 0.7) 0%,
+      rgba(17, 23, 48, 0.55) 100%
+    );
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .card {
+    @apply rounded-2xl bg-surface/80 border border-line shadow-card;
+  }
+
+  .gradient-text {
+    background: linear-gradient(120deg, #5b8dff 0%, #9b5cff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hairline {
+    @apply border-t border-line;
+  }
+
+  /* Effet de verre lumineux pour les CTA principaux */
+  .btn-glow::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(120deg, rgba(91, 141, 255, 0.9), rgba(155, 92, 255, 0.9));
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.8;
+    pointer-events: none;
+  }
+}
+
+/*
+ * ACCESSIBILITÉ : respect strict de prefers-reduced-motion.
+ * Toute l'app lit aussi ce réglage via le hook useReducedMotion (JS),
+ * mais on neutralise ici les animations CSS par sécurité.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
