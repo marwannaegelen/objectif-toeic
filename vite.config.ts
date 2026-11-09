@@ -4,6 +4,8 @@ import { fileURLToPath, URL } from "node:url";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // Sous-chemin pour GitHub Pages (défini via VITE_BASE en CI) ; "/" en local.
+  base: process.env.VITE_BASE || "/",
   plugins: [react()],
   resolve: {
     alias: {
